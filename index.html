@@ -204,17 +204,25 @@
     }
 
     const initialAntCount = this.ants.length;
+    let additionalAnts = 0;
+
+    this.ants.forEach(ant => {
+        ant.health -= 20;
+    });
 
     this.ants = this.ants.filter(ant => {
-        ant.health -= 20;
-        return ant.health > 0; // Keep ants with positive health
+        if (ant.health <= 0) {
+            additionalAnts++;
+            return false; // Exclude ants with non-positive health
+        }
+        return true; // Keep ants with positive health
     });
 
     const remainingAntCount = this.ants.length;
-    const workedAnts = initialAntCount - remainingAntCount;
+    const workedAnts = initialAntCount - remainingAntCount + additionalAnts - 1;
 
     return `${workedAnts} ants starting work!`;
-} 
+}
 
   feed(...antNames) {
     if (!antNames.length) {
